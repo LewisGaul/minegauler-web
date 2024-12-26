@@ -1,11 +1,11 @@
 <h1>Minegauler Highscores</h1>
 
-<!-- UI for filtering -->
+<!-- Filtering UI -->
 <div>
     <label for="difficulty">Filter by difficulty:</label>
     <select id="difficulty" bind:value={difficultyFilter}>
-        {#each Object.values(Difficulty) as mode}
-            <option value={mode}>{mode}</option>
+        {#each Object.entries(Difficulty) as [diff_name, diff_val]}
+            <option value={diff_val}>{diff_name.toLowerCase()}</option>
         {/each}
     </select>
 </div>
@@ -44,16 +44,32 @@
 </div>
 <div>
     <label for="player-name">Filter by player name:</label>
-    <input id="player-name" type="text" bind:value={nameFilter} placeholder="Enter player name" />
+    <input
+        id="player-name"
+        type="text"
+        placeholder="Enter player name"
+        bind:value={tempNameFilter}
+        on:blur={() => nameFilter = tempNameFilter}
+        on:keydown={(e) => e.key === 'Enter' && (nameFilter = tempNameFilter)}
+    />
 </div>
 
+<!-- Highscores table UI -->
+<ul>
+    {#each highscores as highscore}
+        <li>{highscore.name} - {highscore.elapsed.toFixed(2)}</li>
+    {/each}
+</ul>
+
+<!-- Svelte scripting -->
 <script lang="ts">
     import type { Highscore, HighscoreFilters } from '$lib';
     import { Difficulty, GameMode, fetchHighscores } from '$lib';
 
     let highscores: Highscore[] = [];
     let nameFilter: string | null = null;
-    let difficultyFilter: Difficulty | null = Difficulty.Expert;
+    let tempNameFilter: string = "";
+    let difficultyFilter: Difficulty = Difficulty.Expert;
     let dragSelectFilter: boolean | null = null;
     let perCellFilter: number | null = 1;
     let reachFilter: number = 8;
@@ -79,9 +95,3 @@
         });
     }
 </script>
-
-<ul>
-    {#each highscores as highscore}
-        <li>{highscore.name} - {highscore.elapsed.toFixed(2)}</li>
-    {/each}
-</ul>

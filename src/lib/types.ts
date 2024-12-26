@@ -13,7 +13,7 @@ export enum GameMode {
 
 export interface HighscoreFilters {
     name: string | null;
-    difficulty: Difficulty | null;
+    difficulty: Difficulty;
     dragSelect: boolean | null;
     perCell: number | null;
     reach: number;
