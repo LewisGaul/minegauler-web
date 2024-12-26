@@ -13,8 +13,8 @@
     <label for="drag-select">Filter by drag select:</label>
     <select id="drag-select" bind:value={dragSelectFilter}>
         <option value={null}></option>
-        <option value={true}>Enabled</option>
-        <option value={false}>Disabled</option>
+        <option value={true}>on</option>
+        <option value={false}>off</option>
     </select>
 </div>
 <div>
