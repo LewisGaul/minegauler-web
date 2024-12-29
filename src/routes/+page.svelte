@@ -135,6 +135,7 @@
             if (JSON.stringify(filters) !== JSON.stringify(newFilters)) {
                 console.log('New filters from URL:', JSON.stringify(newFilters));
                 filters = newFilters;  // Trigger reactivity on the 'filters' state
+                nameFilterInput = newFilters.name || "";
             }
         })
     });
