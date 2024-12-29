@@ -13,8 +13,8 @@ export default defineConfig({
                     proxy.on('proxyReq', (proxyReq) => {
                         console.log(`Proxying request to: ${proxyReq.path}`);
                     });
-                }
-            }
-        }
-    }
+                },
+            },
+        },
+    },
 });
