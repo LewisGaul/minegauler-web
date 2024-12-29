@@ -1,32 +1,32 @@
 export enum Difficulty {
-    Beginner = "B",
-    Intermediate = "I",
-    Expert = "E",
-    Master = "M",
-    Ludicrous = "L",
+    Beginner = 'B',
+    Intermediate = 'I',
+    Expert = 'E',
+    Master = 'M',
+    Ludicrous = 'L',
 }
 
 export enum GameMode {
-    Regular = "regular",
-    SplitCell = "split_cell",
+    Regular = 'regular',
+    SplitCell = 'split_cell',
 }
 
 export interface HighscoreFilters {
     name: string | null;
     difficulty: Difficulty;
-    dragSelect: boolean | null;
-    perCell: number | null;
+    drag_select: boolean | null;
+    per_cell: number | null;
     reach: number;
-    gameMode: GameMode;
+    game_mode: GameMode;
 }
 
 export interface Highscore {
     name: string;
     difficulty: Difficulty;
-    dragSelect: boolean;
-    perCell: number;
+    drag_select: boolean;
+    per_cell: number;
     reach: number;
-    gameMode: GameMode;
+    game_mode: GameMode;
     elapsed: number;
     timestamp: number;
 }
