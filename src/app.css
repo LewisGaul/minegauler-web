@@ -18,18 +18,6 @@ h1 {
     color: #007bff;
 }
 
-/* Layout for main content */
-main {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 2rem;
-    width: 90%;
-    max-width: 1200px;
-    margin: 2rem 0;
-}
-
 /* Container for the filtering UI */
 .filters {
     display: flex;
@@ -50,7 +38,8 @@ label {
     color: #0056b3;
 }
 
-select, input[type="text"] {
+select,
+input[type='text'] {
     padding: 0.5rem;
     font-size: 1rem;
     border: 1px solid #ccc;
@@ -59,7 +48,8 @@ select, input[type="text"] {
     color: #495057;
 }
 
-select:focus, input[type="text"]:focus {
+select:focus,
+input[type='text']:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
@@ -82,7 +72,7 @@ select:focus, input[type="text"]:focus {
 .highscores li {
     padding: 0.75rem;
     border-bottom: 1px solid #eee;
-    display: flex;
+    display: block;
     justify-content: space-between;
     align-items: center;
     font-size: 1rem;

@@ -69,7 +69,11 @@
     <div class="highscores">
         <ol>
             {#each highscores as highscore, idx}
-                <li>{idx + 1}. {highscore.name} - {highscore.elapsed.toFixed(2)}</li>
+                <li>
+                    {idx + 1}. <a href="/player/{highscore.name}">{highscore.name}</a> - {highscore.elapsed.toFixed(
+                        2,
+                    )}
+                </li>
             {/each}
         </ol>
     </div>
@@ -154,3 +158,17 @@
         });
     });
 </script>
+
+<style>
+    /* Layout for main content */
+    main {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 2rem;
+        width: 90%;
+        max-width: 1200px;
+        margin: 2rem 0;
+    }
+</style>

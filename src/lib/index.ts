@@ -1,9 +1,4 @@
-import {
-    Difficulty,
-    GameMode,
-    type Highscore,
-    type HighscoreFilters,
-} from './types';
+import { Difficulty, GameMode, type Highscore, type HighscoreFilters } from './types';
 
 export * from './types';
 
@@ -18,10 +13,7 @@ export function parseURLParams(params: URLSearchParams): HighscoreFilters {
         if (Object.values(Difficulty).includes(difficultyParam as Difficulty)) {
             difficultyFilter = difficultyParam as Difficulty;
         } else {
-            console.error(
-                'Unrecognised difficulty parameter:',
-                difficultyParam,
-            );
+            console.error('Unrecognised difficulty parameter:', difficultyParam);
         }
     }
 
@@ -95,10 +87,7 @@ export function constructURLParams(filters: HighscoreFilters): URLSearchParams {
 }
 
 export function constructApiURL(filters: HighscoreFilters, baseUrl?: string | URL): URL {
-    let url = new URL(
-        filters.name ? '/api/v1/highscores' : '/api/v1/highscores/ranks',
-        baseUrl,
-    );
+    let url = new URL(filters.name ? '/api/v1/highscores' : '/api/v1/highscores/ranks', baseUrl);
     url.search = constructURLParams(filters).toString();
     return url;
 }
@@ -114,7 +103,10 @@ export function parseBoolean(value: string): boolean | null {
     }
 }
 
-export async function fetchHighscores(baseURL: URL, filters: HighscoreFilters): Promise<Highscore[]> {
+export async function fetchHighscores(
+    baseURL: URL,
+    filters: HighscoreFilters,
+): Promise<Highscore[]> {
     const apiUrl = constructApiURL(filters, baseURL);
     console.log('Fetching:', apiUrl.toString());
     const res = await fetch(apiUrl.toString());

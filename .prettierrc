@@ -10,7 +10,7 @@
             "files": "*.svelte",
             "options": {
                 "parser": "svelte",
-                "svelteSortOrder": "markup-scripts-styles"
+                "svelteSortOrder": "options-markup-scripts-styles"
             }
         }
     ]
