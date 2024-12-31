@@ -59,8 +59,9 @@ input[type='text']:focus {
 .highscores ol {
     list-style-type: decimal;
     padding: 0 1rem;
-    width: 100%;
-    max-width: 800px;
+    width: 100%; /* Take up the full width of the container */
+    max-width: 100%; /* Ensure it doesn't exceed the container width */
+    box-sizing: border-box; /* Include padding and borders in the width calculation */
     background: #ffffff;
     border: 1px solid #ddd;
     border-radius: 8px;

@@ -1,53 +1,54 @@
 <h1>Player {name}</h1>
 
+{#snippet highscoresTable(filters: {
+    drag_select: boolean | null;
+    per_cell: number | null;
+    reach: number;
+    game_mode: GameMode;
+})}
+    <div class="difficulty-list">
+        {#each Object.entries(Difficulty) as [diff_name, difficulty]}
+            <div class="difficulty-container">
+                <h4>{diff_name}</h4>
+                <div class="highscores">
+                    {#await fetchHighscores(page.url, { name, difficulty, ...filters })}
+                        <p>Loading...</p>
+                    {:then highscores}
+                        <ol>
+                            {#each highscores.slice(0, 5) as highscore, idx}
+                                <li>
+                                    {idx + 1}. {highscore.name} - {highscore.elapsed.toFixed(2)}
+                                </li>
+                            {/each}
+                        </ol>
+                    {/await}
+                </div>
+            </div>
+        {/each}
+    </div>
+{/snippet}
+
 <main>
     <section>
         <h2>Classic</h2>
 
-        <div class="difficulty-list">
-            {#each Object.entries(Difficulty) as [diff_name, difficulty]}
-                <div class="difficulty-container">
-                    <h4>{diff_name}</h4>
-                    <div class="highscores">
-                        {#await fetchHighscores( page.url, { name, drag_select: false, reach: 8, per_cell: 1, difficulty, game_mode: GameMode.Regular }, )}
-                            <p>Loading...</p>
-                        {:then highscores}
-                            <ol>
-                                {#each highscores.slice(0, 5) as highscore, idx}
-                                    <li>
-                                        {idx + 1}. {highscore.name} - {highscore.elapsed.toFixed(2)}
-                                    </li>
-                                {/each}
-                            </ol>
-                        {/await}
-                    </div>
-                </div>
-            {/each}
-        </div>
+        {@render highscoresTable({
+            drag_select: false,
+            per_cell: 1,
+            reach: 8,
+            game_mode: GameMode.Regular,
+        })}
     </section>
 
     <section>
         <h2>Drag select</h2>
-        <div class="difficulty-list">
-            {#each Object.entries(Difficulty) as [diff_name, difficulty]}
-                <div class="difficulty-container">
-                    <h4>{diff_name}</h4>
-                    <div class="highscores">
-                        {#await fetchHighscores( page.url, { name, drag_select: true, reach: 8, per_cell: 1, difficulty, game_mode: GameMode.Regular }, )}
-                            <p>Loading...</p>
-                        {:then highscores}
-                            <ol>
-                                {#each highscores.slice(0, 5) as highscore, idx}
-                                    <li>
-                                        {idx + 1}. {highscore.name} - {highscore.elapsed.toFixed(2)}
-                                    </li>
-                                {/each}
-                            </ol>
-                        {/await}
-                    </div>
-                </div>
-            {/each}
-        </div>
+
+        {@render highscoresTable({
+            drag_select: true,
+            per_cell: 1,
+            reach: 8,
+            game_mode: GameMode.Regular,
+        })}
     </section>
 
     <section>
@@ -55,28 +56,12 @@
 
         {#each [2, 3] as per_cell}
             <h3>Max per cell: {per_cell}</h3>
-            <div class="difficulty-list">
-                {#each Object.entries(Difficulty) as [diff_name, difficulty]}
-                    <div class="difficulty-container">
-                        <h4>{diff_name}</h4>
-                        <div class="highscores">
-                            {#await fetchHighscores( page.url, { name, drag_select: null, reach: 8, per_cell, difficulty, game_mode: GameMode.Regular }, )}
-                                <p>Loading...</p>
-                            {:then highscores}
-                                <ol>
-                                    {#each highscores.slice(0, 5) as highscore, idx}
-                                        <li>
-                                            {idx + 1}. {highscore.name} - {highscore.elapsed.toFixed(
-                                                2,
-                                            )}
-                                        </li>
-                                    {/each}
-                                </ol>
-                            {/await}
-                        </div>
-                    </div>
-                {/each}
-            </div>
+            {@render highscoresTable({
+                drag_select: null,
+                per_cell,
+                reach: 8,
+                game_mode: GameMode.Regular,
+            })}
         {/each}
     </section>
 
@@ -85,54 +70,24 @@
 
         {#each [4, 24] as reach}
             <h3>Reach: {reach}</h3>
-            <div class="difficulty-list">
-                {#each Object.entries(Difficulty) as [diff_name, difficulty]}
-                    <div class="difficulty-container">
-                        <h4>{diff_name}</h4>
-                        <div class="highscores">
-                            {#await fetchHighscores( page.url, { name, drag_select: null, reach, per_cell: 1, difficulty, game_mode: GameMode.Regular }, )}
-                                <p>Loading...</p>
-                            {:then highscores}
-                                <ol>
-                                    {#each highscores.slice(0, 5) as highscore, idx}
-                                        <li>
-                                            {idx + 1}. {highscore.name} - {highscore.elapsed.toFixed(
-                                                2,
-                                            )}
-                                        </li>
-                                    {/each}
-                                </ol>
-                            {/await}
-                        </div>
-                    </div>
-                {/each}
-            </div>
+            {@render highscoresTable({
+                drag_select: null,
+                per_cell: null,
+                reach,
+                game_mode: GameMode.Regular,
+            })}
         {/each}
     </section>
 
     <section>
         <h2>Split cell</h2>
 
-        <div class="difficulty-list">
-            {#each Object.entries(Difficulty) as [diff_name, difficulty]}
-                <div class="difficulty-container">
-                    <h4>{diff_name}</h4>
-                    <div class="highscores">
-                        {#await fetchHighscores( page.url, { name, drag_select: null, reach: 8, per_cell: 1, difficulty, game_mode: GameMode.SplitCell }, )}
-                            <p>Loading...</p>
-                        {:then highscores}
-                            <ol>
-                                {#each highscores.slice(0, 5) as highscore, idx}
-                                    <li>
-                                        {idx + 1}. {highscore.name} - {highscore.elapsed.toFixed(2)}
-                                    </li>
-                                {/each}
-                            </ol>
-                        {/await}
-                    </div>
-                </div>
-            {/each}
-        </div>
+        {@render highscoresTable({
+            drag_select: null,
+            per_cell: null,
+            reach: 8,
+            game_mode: GameMode.SplitCell,
+        })}
     </section>
 </main>
 
@@ -144,48 +99,68 @@
 </script>
 
 <style>
-    /* This ensures the sections inside the container appear below each other */
-    section {
-        display: block; /* Ensure sections are treated as block-level elements */
-        margin-bottom: 2rem; /* Adds space between each section */
+    /* Ensure the main element fills more of the screen */
+    main {
+        display: flex;
+        flex-direction: column; /* Stack sections vertically */
+        flex-grow: 1; /* Allow main to grow and fill available space */
+        margin: 1rem auto; /* Center the main content with some vertical margin */
+        width: 90vw; /* Use 90% of the viewport width on larger screens */
+        padding: 1rem; /* Add padding for spacing */
+        box-sizing: border-box; /* Include padding and borders in dimensions */
     }
 
+    /* Ensure each section inside main takes some space */
+    main > section {
+        flex: 1; /* Allow sections to grow equally if space is available */
+        margin-bottom: 2rem; /* Space between sections */
+    }
+
+    /* Container for difficulty tables to allow side-by-side layout */
     .difficulty-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1.5rem; /* Adds space between the blocks */
-        justify-content: flex-start;
-        margin: 0 -1.5rem; /* Compensates for the gap on the container's sides */
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Equal-width columns */
+        gap: 1rem; /* Space between tables */
     }
 
+    /* Individual difficulty container styling */
     .difficulty-container {
+        border: 1px solid #ccc;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         display: flex;
-        flex-direction: column; /* Stack <h4> above the <div> */
-        flex: 1 1 18%; /* Ensures the containers take up about 18% of the width */
-        max-width: 20%; /* Optional: ensures each block doesn’t exceed 20% of the container width */
-        min-width: 200px; /* Ensures the containers don't shrink too much */
-        box-sizing: border-box; /* Includes padding and borders in the element's total width */
+        flex-direction: column; /* Ensure child content stacks vertically */
+        box-sizing: border-box; /* Include padding and border in width */
+        overflow: visible; /* Ensure contents aren't clipped */
+        height: auto; /* Allow the container to grow with its content */
+        min-height: 0; /* Prevent flexbox from imposing an incorrect minimum height */
     }
 
+    /* Style for difficulty headers */
     .difficulty-container h4 {
-        margin-top: 0;
-        margin-bottom: 0.5rem; /* Optional: spacing between <h4> and <div> */
+        margin-bottom: 0.5rem;
+        text-align: center;
+        font-size: 1.2rem;
+        color: #333;
     }
 
-    .difficulty-container .highscores {
-        flex-grow: 1;
-        max-width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between; /* Distributes space to fit the content */
+    /* Optional: Improve loading state appearance */
+    .difficulty-container p {
+        text-align: center;
+        font-style: italic;
+        color: #666;
     }
 
-    .difficulty-container .highscores ol {
-        padding-left: 1rem; /* Adds padding to the left of the list */
-        margin: 0; /* Resets the margin */
-        list-style-position: inside; /* Aligns the list numbers with the content */
-        max-height: calc(100vh - 200px); /* Limits height of the <ol> based on the viewport */
-        overflow-y: auto; /* Adds scroll if the list is too long */
-        flex-grow: 1; /* Allows the <ol> to grow to take up the available space */
+    /* Add responsive adjustments for smaller screens */
+    @media (max-width: 768px) {
+        .difficulty-list {
+            flex-direction: column; /* Stack tables vertically on narrow screens */
+        }
+
+        .difficulty-container {
+            max-width: 100%; /* Allow full width for narrow layouts */
+        }
     }
 </style>
