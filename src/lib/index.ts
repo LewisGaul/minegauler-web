@@ -1,4 +1,5 @@
 import { Difficulty, GameMode, type Highscore, type HighscoreFilters } from './types';
+import { format as dateFormat } from 'date-fns';
 
 export * from './types';
 
@@ -114,4 +115,9 @@ export async function fetchHighscores(
         throw new Error(`Failed to fetch highscores: ${res.statusText}`);
     }
     return await res.json();
+}
+
+export function formatDate(timestamp: number) {
+    const date = new Date(timestamp * 1000);
+    return dateFormat(date, 'yyyy-MM-dd');
 }

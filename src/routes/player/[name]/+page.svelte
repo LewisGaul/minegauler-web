@@ -1,6 +1,20 @@
 <h1>Player {name}</h1>
 
-{#snippet highscoresTable(filters: {
+{#snippet highscoresTable(highscores: Highscore[])}
+    <div class="highscores">
+        <ol>
+            {#each highscores.slice(0, 5) as highscore, idx}
+                <li>
+                    {idx + 1}. <b>{highscore.elapsed.toFixed(2)}</b> ({formatDate(
+                        highscore.timestamp,
+                    )})
+                </li>
+            {/each}
+        </ol>
+    </div>
+{/snippet}
+
+{#snippet highscoresDifficultyTables(filters: {
     drag_select: boolean | null;
     per_cell: number | null;
     reach: number;
@@ -10,19 +24,11 @@
         {#each Object.entries(Difficulty) as [diff_name, difficulty]}
             <div class="difficulty-container">
                 <h4>{diff_name}</h4>
-                <div class="highscores">
-                    {#await fetchHighscores(page.url, { name, difficulty, ...filters })}
-                        <p>Loading...</p>
-                    {:then highscores}
-                        <ol>
-                            {#each highscores.slice(0, 5) as highscore, idx}
-                                <li>
-                                    {idx + 1}. {highscore.name} - {highscore.elapsed.toFixed(2)}
-                                </li>
-                            {/each}
-                        </ol>
-                    {/await}
-                </div>
+                {#await fetchHighscores(page.url, { name, difficulty, ...filters })}
+                    <p>Loading...</p>
+                {:then highscores}
+                    {@render highscoresTable(highscores)}
+                {/await}
             </div>
         {/each}
     </div>
@@ -32,7 +38,7 @@
     <section>
         <h2>Classic</h2>
 
-        {@render highscoresTable({
+        {@render highscoresDifficultyTables({
             drag_select: false,
             per_cell: 1,
             reach: 8,
@@ -43,7 +49,7 @@
     <section>
         <h2>Drag select</h2>
 
-        {@render highscoresTable({
+        {@render highscoresDifficultyTables({
             drag_select: true,
             per_cell: 1,
             reach: 8,
@@ -56,7 +62,7 @@
 
         {#each [2, 3] as per_cell}
             <h3>Max per cell: {per_cell}</h3>
-            {@render highscoresTable({
+            {@render highscoresDifficultyTables({
                 drag_select: null,
                 per_cell,
                 reach: 8,
@@ -70,7 +76,7 @@
 
         {#each [4, 24] as reach}
             <h3>Reach: {reach}</h3>
-            {@render highscoresTable({
+            {@render highscoresDifficultyTables({
                 drag_select: null,
                 per_cell: null,
                 reach,
@@ -82,7 +88,7 @@
     <section>
         <h2>Split cell</h2>
 
-        {@render highscoresTable({
+        {@render highscoresDifficultyTables({
             drag_select: null,
             per_cell: null,
             reach: 8,
@@ -93,7 +99,7 @@
 
 <script lang="ts">
     import { page } from '$app/state';
-    import { Difficulty, GameMode, fetchHighscores } from '$lib';
+    import { Difficulty, GameMode, fetchHighscores, formatDate, type Highscore } from '$lib';
 
     let name: string = $state(page.params['name']);
 </script>
@@ -140,17 +146,10 @@
 
     /* Style for difficulty headers */
     .difficulty-container h4 {
-        margin-bottom: 0.5rem;
+        margin: 0;
         text-align: center;
         font-size: 1.2rem;
         color: #333;
-    }
-
-    /* Optional: Improve loading state appearance */
-    .difficulty-container p {
-        text-align: center;
-        font-style: italic;
-        color: #666;
     }
 
     /* Add responsive adjustments for smaller screens */
